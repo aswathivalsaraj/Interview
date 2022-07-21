@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm-run-all --parallel watch:server start:web",
+    "start:web": "ng serve",
+    "start:server": "nodemon src/server/server",
+    "watch:server": "nodemon --watch src/server/server src/server/server",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,6 +21,10 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "mongodb": "^4.8.0",
+    "mongoose": "^6.4.4",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
