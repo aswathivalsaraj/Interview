@@ -9,18 +9,21 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class HomePageComponent implements OnInit {
   public title!: string;
-  public footerTxt!: string;
   public products: IProduct[];
   public activeProducts: IProduct[] = [];
   public deletedProducts: IProduct[] = [];
+  public totalProductCost: number = 0;
+  public totalSelected: number = 0;
+  public totalForDeleted: number =0;
   constructor(private product: ProductsService) { this.products = []; }
 
   ngOnInit(): void {
     this.product.getProducts().subscribe((data: IProductData)=>{
       this.products = data.products;
-      this.activeProducts = [...this.products]
+      this.activeProducts = [...this.products];
+      this.totalProductCost = this.products.map(i=>i.price).reduce((a,b)=>a+b, 0);
+      this.totalSelected = this.totalProductCost;
       this.title = data.header;
-      this.footerTxt = data.footerTxt;
     });
   }
   public deleteItem(itemId: IProduct["id"]): void {
@@ -31,9 +34,8 @@ export class HomePageComponent implements OnInit {
       this.activeProducts.splice(
         this.activeProducts.indexOf(selectedItem), 1
       );
-      console.log(this.activeProducts);
-    }    
-    console.log(this.deletedProducts)
+      this.updateTotalCost();
+    }
   }
   public restoreItem(itemId: IProduct["id"]): void{
     const selectedItem:IProduct |undefined = this.products.find(x => x.id === itemId)
@@ -43,7 +45,11 @@ export class HomePageComponent implements OnInit {
       this.deletedProducts.splice(
         this.deletedProducts.indexOf(selectedItem), 1
       );
+      this.updateTotalCost();
     }    
-    console.log(this.activeProducts)
+  }
+  private updateTotalCost(): void {
+    this.totalSelected= this.activeProducts.map(i=>i.price).reduce((a,b)=>a+b, 0);
+    this.totalForDeleted = this.deletedProducts.map(i=>i.price).reduce((a,b)=>a+b, 0);
   }
 }

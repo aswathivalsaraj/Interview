@@ -7,6 +7,5 @@ export interface IProduct{
 }
 export interface IProductData {
     header: string;
-    footerTxt:string;
     products:IProduct[];
 }
