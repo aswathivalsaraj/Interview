@@ -4,7 +4,6 @@ const path = require("path");
 var _ = require('lodash');
 var jsonFilePath = "../data/products.json";
 var products = [];
-
 productsRouter.get("/", async (request, response) => {
    fs.readFile((path.resolve(__dirname, jsonFilePath)), 'utf8', (err, data) => {
     if (err) {
@@ -14,5 +13,4 @@ productsRouter.get("/", async (request, response) => {
     response.send(products);
   });  
 });
-
 module.exports = productsRouter;

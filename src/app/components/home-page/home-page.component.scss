@@ -1,2 +1,8 @@
 .active { border-bottom: 2px dotted #434141;}
-.column-header { color: rgb(23, 4, 104)}
+.column-header { color: rgb(18, 9, 59)}
+.header{ background-color: #0D6DFD; color: white;}
+.flex {
+    display: inline-flex;
+    width: 30%;
+    justify-content:space-evenly
+ }

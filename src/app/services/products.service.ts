@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as config from './../../server/config/config.json';
+import { Observable } from 'rxjs';
+import { IProductData } from '../models/products.models';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +13,7 @@ export class ProductsService {
     const configData = JSON.parse(JSON.stringify(config));
     this.apiUrl     = configData ? (configData.hostname +":"+configData.port): "";
   }
-  public getProducts() {
+  public getProducts(): Observable<any> {
     return this.http.get(this.apiUrl+"/products"); 
   }
 }

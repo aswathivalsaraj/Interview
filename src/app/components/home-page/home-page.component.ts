@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IProduct, IProductData } from 'src/app/models/products.models';
 import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
@@ -9,17 +10,40 @@ import { ProductsService } from 'src/app/services/products.service';
 export class HomePageComponent implements OnInit {
   public title!: string;
   public footerTxt!: string;
-
-  public products: any;
-  constructor(private product: ProductsService) { }
+  public products: IProduct[];
+  public activeProducts: IProduct[] = [];
+  public deletedProducts: IProduct[] = [];
+  constructor(private product: ProductsService) { this.products = []; }
 
   ngOnInit(): void {
-    this.product.getProducts().subscribe((data: any)=>{
+    this.product.getProducts().subscribe((data: IProductData)=>{
       this.products = data.products;
+      this.activeProducts = [...this.products]
       this.title = data.header;
       this.footerTxt = data.footerTxt;
     });
-    console.log(this.products);
   }
-
+  public deleteItem(itemId: IProduct["id"]): void {
+    const selectedItem:IProduct |undefined = this.activeProducts.find(x => x.id === itemId)
+    const found = this.deletedProducts.some(el => el.id === itemId);
+    if (!found && selectedItem) {
+      this.deletedProducts.push(selectedItem);
+      this.activeProducts.splice(
+        this.activeProducts.indexOf(selectedItem), 1
+      );
+      console.log(this.activeProducts);
+    }    
+    console.log(this.deletedProducts)
+  }
+  public restoreItem(itemId: IProduct["id"]): void{
+    const selectedItem:IProduct |undefined = this.products.find(x => x.id === itemId)
+    const found = this.activeProducts.some(el => el.id === itemId);
+    if (!found && selectedItem) {
+      this.activeProducts.push(selectedItem);
+      this.deletedProducts.splice(
+        this.deletedProducts.indexOf(selectedItem), 1
+      );
+    }    
+    console.log(this.activeProducts)
+  }
 }
