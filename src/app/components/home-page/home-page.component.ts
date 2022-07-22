@@ -8,10 +8,18 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class HomePageComponent implements OnInit {
   public title!: string;
+  public footerTxt!: string;
+
+  public products: any;
   constructor(private product: ProductsService) { }
 
   ngOnInit(): void {
-    this.title = this.product.getPageTitle();
+    this.product.getProducts().subscribe((data: any)=>{
+      this.products = data.products;
+      this.title = data.header;
+      this.footerTxt = data.footerTxt;
+    });
+    console.log(this.products);
   }
 
 }

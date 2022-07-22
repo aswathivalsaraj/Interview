@@ -1,16 +1,18 @@
-var productsRouter = require('express').Router(); 
-const productsModel = require("../models/products.model");
-productsRouter.get("/products", async (request, response) => {
-    const users = await productsModel.find({});
-    try {
-      response.send(users);
-    } catch (error) {
-      response.status(500).send(error);
-    }
-});
+var productsRouter = require('express').Router();
+const fs = require('fs')
+const path = require("path");
+var _ = require('lodash');
+var jsonFilePath = "../data/products.json";
+var products = [];
 
-productsRouter.get("/",  (req, res) => {
-    res.send("No Matching Found");
+productsRouter.get("/", async (request, response) => {
+   fs.readFile((path.resolve(__dirname, jsonFilePath)), 'utf8', (err, data) => {
+    if (err) {
+      response.json({ Error: "File read failed" });
+    }
+    products = JSON.parse(JSON.stringify(data));
+    response.send(products);
+  });  
 });
 
 module.exports = productsRouter;
